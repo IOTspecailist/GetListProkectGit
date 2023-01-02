@@ -44,6 +44,10 @@ func CreateStation() *Station {
 	return station
 
 }
+
+func (s *Station) Restore(data []byte) {
+	FromBytes(s, data)
+}
 func (s *Station) AddStation() {
 	SaveIntoStationTable(s.StationName, Tobytes(s))
 }
@@ -67,8 +71,8 @@ func SaveIntoStationTable(data string, byteData []byte) {
 func SearchStationTable() []byte {
 	var data []byte
 	DatabaseOpen().View(func(tx *boltDB.Tx) error {
-		bucket := tx.Bucket([]byte(tableName))
-		data = bucket.Get([]byte("GangNamStation"))
+		bucket := tx.Bucket([]byte(tableName)) //from tableName
+		data = bucket.Get([]byte("GangNam"))   // where key = GangNam
 		return nil
 	})
 	return data
@@ -78,4 +82,11 @@ func HandleErr(err error) {
 	if err != nil {
 		log.Panic()
 	}
+}
+
+func FromBytes(i interface{}, data []byte) {
+	//들어온 바이트를 읽어서~
+	encoder := gob.NewDecoder(bytes.NewReader(data))
+	HandleErr(encoder.Decode(i))
+	//포인터로 복원해주는 거다? i로 온게 포인터라 그런가 그래서 리턴이 없나
 }

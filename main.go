@@ -10,16 +10,25 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"reflect"
+	"unsafe"
 )
 
 func main() {
 
 	defer db.DBClose()
-	fmt.Println(db.CreateStation())
-
+	//fmt.Println(db.CreateStation())
+	//db.CreateStation().Restore(db.SearchStationTable())
+	//fmt.Println(db.CreateStation())
+	var asdf = BytesToString(db.SearchStationTable())
+	fmt.Println(asdf)
 	//db.SaveIntoStationTable("asdf", Tobytes("asds"))
 }
-
+func BytesToString(b []byte) string {
+	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh := reflect.StringHeader{bh.Data, bh.Len}
+	return *(*string)(unsafe.Pointer(&sh))
+}
 func Tobytes(i interface{}) []byte {
 
 	var aBuffer bytes.Buffer
