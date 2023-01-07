@@ -13,6 +13,7 @@ import (
 	db "GetListProject/db" //database.go의 package를 db로 해야(맨윗줄) 패키지로 인식해서 임포트 가능
 	"bytes"
 	"encoding/gob"
+	"fmt"
 	"reflect"
 	"unsafe"
 )
@@ -22,20 +23,23 @@ const (
 	Team2 = "TeamRoadFC"
 )
 
-var TeamPlayer []string
-
 func main() {
 
 	defer db.DBClose()
-	TeamPlayer[0] = "enganu"
-	TeamPlayer[1] = "colvi"
-	TeamPlayer[2] = "JungChanSung"
-	db.CreateTeam(Team1, TeamPlayer)
+	var TeamPlayer1 []byte
+	var TeamPlayer2 []string
 
-	TeamPlayer[0] = "MHMan"
-	TeamPlayer[1] = "HISu"
-	TeamPlayer[2] = "YYJun"
-	db.CreateTeam(Team2, TeamPlayer)
+	TeamPlayer1[0] = Tobytes("enganu") //tobyte로 해야하는데 왜 string을 했을까
+	TeamPlayer1[1] = "colvi"
+	TeamPlayer1[2] = "JungChanSung"
+	fmt.Println(TeamPlayer1)
+
+	//db.CreateTeam(Team1, TeamPlayer1)
+
+	TeamPlayer2[0] = "MHMan"
+	TeamPlayer2[1] = "HISu"
+	TeamPlayer2[2] = "YYJun"
+	//db.CreateTeam(Team2, TeamPlayer2)
 
 	//db.CreateTeam().Restore(db.SearchStationTable())
 	//fmt.Println(db.CreateTeam())

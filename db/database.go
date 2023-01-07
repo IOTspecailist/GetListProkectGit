@@ -54,6 +54,7 @@ func CreateTeam(teamName string, player []string) *Team {
 		TeamName: teamName,
 		Player:   player,
 	}
+	fmt.Println("생성된 팀 :", team)
 	team.Teaminfo_Into_BoltDB()
 	return team
 }
