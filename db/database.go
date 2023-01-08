@@ -1,10 +1,8 @@
 package db
 
 import (
-	"bytes"
-	"encoding/gob"
+	"GetListProject/utils"
 	"fmt"
-	"log"
 
 	boltDB "github.com/boltdb/bolt"
 )
@@ -31,9 +29,9 @@ func DatabaseOpen() *boltDB.DB {
 		// 쉽게말해서 가방을 하나 사서 이름을 붙여준거다 / 가방 = 데이터베이스, 가방에 넣는 물건 = 데이터
 		// 볼트디비의 포인터 구조체를 리턴받는다 / 에러리턴은 왜그런건지
 		database = databasePointer
-		HandleErr(err)
+		utils.HandleErr(err)
 		err = database.Update(func(tx *boltDB.Tx) error {
-			HandleErr(err)
+			utils.HandleErr(err)
 			_, err := tx.CreateBucketIfNotExists([]byte(TableName)) // StationTable이란 이름의 테이블이 없으면 생성한다
 			fmt.Println("★★DB_Table_created:", TableName)
 			return err
@@ -66,14 +64,7 @@ func CreateTeam(teamName string, player [3]string) *Team {
 //insert문 호출하는 리시버펑션, 리시버펑션은 struct의 값에 변화를 준다
 func (s *Team) Teaminfo_Into_BoltDB() {
 	fmt.Println("★★DB_input_data:", s)
-	Insert_Into_MMACompanyTable(s.TeamName, Tobytes(s))
-}
-
-func Tobytes(i interface{}) []byte {
-	var aBuffer bytes.Buffer
-	encoder := gob.NewEncoder(&aBuffer)
-	HandleErr(encoder.Encode(i))
-	return aBuffer.Bytes()
+	Insert_Into_MMACompanyTable(s.TeamName, utils.Tobytes(s))
 }
 
 //Table에 데이터 추가
@@ -84,7 +75,7 @@ func Insert_Into_MMACompanyTable(data string, byteData []byte) {
 		fmt.Println("★★DB_data inserted")
 		return err
 	})
-	HandleErr(err)
+	utils.HandleErr(err)
 }
 
 //Table로부터 데이터 조회
@@ -98,19 +89,6 @@ func SearchMMACompanyTable(s string) []byte {
 	return data
 }
 
-func HandleErr(err error) {
-	if err != nil {
-		log.Panic() //어떤 에러가 발생했는지 로그로 알려주고 프로그램을 종료시키는 함수
-	}
-}
-
-func FromBytes(i interface{}, data []byte) {
-	//들어온 바이트를 읽어서~
-	encoder := gob.NewDecoder(bytes.NewReader(data))
-	HandleErr(encoder.Decode(i))
-	//포인터로 복원해주는 거다? i로 온게 포인터라 그런가 그래서 리턴이 없나
-}
-
 func (s *Team) Restore(data []byte) {
-	FromBytes(s, data)
+	utils.FromBytes(s, data)
 }
