@@ -11,12 +11,9 @@ package main
 */
 import (
 	db "GetListProject/db" //database.go의 package를 db로 해야(맨윗줄) 패키지로 인식해서 임포트 가능
-	"GetListProject/utils"
-	"bytes"
-	"encoding/gob"
 	"fmt"
-	"reflect"
-	"unsafe"
+	"log"
+	"net/http"
 )
 
 const (
@@ -25,10 +22,29 @@ const (
 )
 
 var team db.Team
+var port int = 4000
 
 func main() {
 	fmt.Println("==============================Start==============================")
+
 	defer db.DBClose()
+
+	//searchTeam()
+	handler := http.NewServeMux()
+	handler.HandleFunc("/", home)
+	fmt.Printf("Listening on http://localhost:%d\n", port)            // %s\n에서 :%d 로 변경 (prvSrc_16)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), handler)) //서버 열기 // port에서 fmt.Sprintf(":%d", port)변경  (prvSrc_16)
+
+	fmt.Println("==============================END==============================")
+
+}
+
+func home(rw http.ResponseWriter, r *http.Request) {
+	searchTeam()
+	fmt.Fprint(rw, team)
+}
+
+func searchTeam() {
 	var TeamPlayer1 [3]string
 	var TeamPlayer2 [3]string
 
@@ -42,25 +58,27 @@ func main() {
 	TeamPlayer2[2] = "YYJun"
 	//db.CreateTeam(Team2, TeamPlayer2)
 
-	team.Restore(db.SearchMMACompanyTable(Team1))
+	team.Restore(db.SearchMMACompanyTable(Team2))
 
 	fmt.Println("+++++++++++++++++++++++Team+++++++++++++++++++++++++++++++")
 	fmt.Printf("[%s]", team)
-	team.Restore(db.SearchMMACompanyTable(Team2))
+	team.Restore(db.SearchMMACompanyTable(Team1))
 
 	fmt.Printf("[%s]", team)
-	fmt.Println("==============================END==============================")
+
 }
 
-func BytesToString(b []byte) string {
-	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	sh := reflect.StringHeader{bh.Data, bh.Len}
-	return *(*string)(unsafe.Pointer(&sh))
-}
+/*
+team struct의 상위 struct가 필요하다
+fightteam
+	ufc
+		1
+		2
+		3
 
-func Tobytes(i interface{}) []byte { // 어떤 값이든 받을 수 있도록 매개변수 interface로 선언
-	var aBuffer bytes.Buffer            // 바이트배열로 만들기위한 틀(aBuffer)
-	encoder := gob.NewEncoder(&aBuffer) // 틀을 가지고 재료를 굽는 오븐(encoder) 구입 (틀이 들어가 있는 오븐임)
-	utils.HandleErr(encoder.Encode(i))  // 오븐(encoder)안에 틀(aBuffer)이 있는상황에서 재료(i)를 투입하여 오븐(encoder)의 굽기버튼 클릭(Encode())
-	return aBuffer.Bytes()              // 틀을 꺼내서 식탁으로 틀(aBuffer)에있는 빵(Bytes())을 리턴 // Bytes()는 bytes 패키지의 Buffer struct의 리시버 펑션이다
-}
+	roadfc
+		1
+		2
+		3
+
+*/
