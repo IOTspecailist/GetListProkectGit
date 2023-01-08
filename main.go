@@ -23,17 +23,17 @@ const (
 	Team2 = "TeamRoadFC"
 )
 
+var team db.Team
+
 func main() {
-
+	fmt.Println("==============================Start==============================")
 	defer db.DBClose()
-	var TeamPlayer1 []byte
-	var TeamPlayer2 []string
+	var TeamPlayer1 [3]string
+	var TeamPlayer2 [3]string
 
-	TeamPlayer1[0] = Tobytes("enganu") //tobyte로 해야하는데 왜 string을 했을까
+	TeamPlayer1[0] = "enganu"
 	TeamPlayer1[1] = "colvi"
-	TeamPlayer1[2] = "JungChanSung"
-	fmt.Println(TeamPlayer1)
-
+	TeamPlayer1[2] = "volkanofseki"
 	//db.CreateTeam(Team1, TeamPlayer1)
 
 	TeamPlayer2[0] = "MHMan"
@@ -41,11 +41,14 @@ func main() {
 	TeamPlayer2[2] = "YYJun"
 	//db.CreateTeam(Team2, TeamPlayer2)
 
-	//db.CreateTeam().Restore(db.SearchStationTable())
-	//fmt.Println(db.CreateTeam())
-	//var asdf = BytesToString(db.SearchStationTable())
-	//fmt.Println(asdf)
-	//db.Insert_Into_MMACompanyTable("asdf", Tobytes("asds"))
+	team.Restore(db.SearchStationTable(Team1))
+
+	fmt.Println("+++++++++++++++++++++++Team+++++++++++++++++++++++++++++++")
+	fmt.Printf("[%s]", team)
+	team.Restore(db.SearchStationTable(Team2))
+
+	fmt.Printf("[%s]", team)
+	fmt.Println("==============================END==============================")
 }
 
 func BytesToString(b []byte) string {
