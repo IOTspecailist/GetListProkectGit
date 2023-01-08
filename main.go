@@ -41,11 +41,11 @@ func main() {
 	TeamPlayer2[2] = "YYJun"
 	//db.CreateTeam(Team2, TeamPlayer2)
 
-	team.Restore(db.SearchStationTable(Team1))
+	team.Restore(db.SearchMMACompanyTable(Team1))
 
 	fmt.Println("+++++++++++++++++++++++Team+++++++++++++++++++++++++++++++")
 	fmt.Printf("[%s]", team)
-	team.Restore(db.SearchStationTable(Team2))
+	team.Restore(db.SearchMMACompanyTable(Team2))
 
 	fmt.Printf("[%s]", team)
 	fmt.Println("==============================END==============================")

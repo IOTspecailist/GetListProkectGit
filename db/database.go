@@ -88,7 +88,7 @@ func Insert_Into_MMACompanyTable(data string, byteData []byte) {
 }
 
 //Table로부터 데이터 조회
-func SearchStationTable(s string) []byte {
+func SearchMMACompanyTable(s string) []byte {
 	var data []byte                                 //볼트디비는 인아웃이 바이트배열이므로 디비조회해서 결과를 저장할 변수를 선언함 / 리턴도 할겸
 	DatabaseOpen().View(func(tx *boltDB.Tx) error { //select value
 		bucket := tx.Bucket([]byte(TableName)) //from tableName
