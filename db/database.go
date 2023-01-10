@@ -12,6 +12,10 @@ const (
 	TableName    = "MMACompanyTable"
 )
 
+type FightTeam struct {
+	organagation []Team
+}
+
 //팀 정보 기본 틀
 type Team struct {
 	TeamName string
