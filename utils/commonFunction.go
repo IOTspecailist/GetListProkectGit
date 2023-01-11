@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/gob"
+	"fmt"
 	"log"
 	"reflect"
 	"unsafe"
@@ -10,14 +11,19 @@ import (
 
 func HandleErr(err error) {
 	if err != nil {
+		fmt.Println("★★8")
 		log.Panic() //어떤 에러가 발생했는지 로그로 알려주고 프로그램을 종료시키는 함수
+		fmt.Println("★★9")
 	}
 }
 
 func FromBytes(i interface{}, data []byte) {
 	//들어온 바이트를 읽어서~
+	fmt.Println("★★6")
 	encoder := gob.NewDecoder(bytes.NewReader(data))
+	fmt.Println("★★7")
 	HandleErr(encoder.Decode(i))
+
 	//포인터로 복원해주는 거다? i로 온게 포인터라 그런가 그래서 리턴이 없나
 }
 
