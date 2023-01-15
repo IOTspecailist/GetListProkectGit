@@ -19,9 +19,12 @@ func HandleErr(err error) {
 
 func FromBytes(i interface{}, data []byte) {
 	//들어온 바이트를 읽어서~
-	fmt.Println("★★6")
+	fmt.Println("★★6 data:", data)
+	fmt.Println("★★6 data BytesToString :", BytesToString(data))
 	encoder := gob.NewDecoder(bytes.NewReader(data))
-	fmt.Println("★★7")
+
+	fmt.Println("★★7 encoder:", encoder)
+	fmt.Println("★★i:", i)
 	HandleErr(encoder.Decode(i))
 
 	//포인터로 복원해주는 거다? i로 온게 포인터라 그런가 그래서 리턴이 없나

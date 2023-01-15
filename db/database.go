@@ -77,10 +77,10 @@ func SearchMMACompanyTable(s string) []byte {
 	fmt.Println("★★DB_searching DataBase..............................")
 	var data []byte                           //볼트디비는 인아웃이 바이트배열이므로 디비조회해서 결과를 저장할 변수를 선언함 / 리턴도 할겸
 	DBOpen().View(func(tx *boltDB.Tx) error { //select value
-		fmt.Println("★★1")
+		fmt.Println("★★1 input data", s)
 		bucket := tx.Bucket([]byte(TableName)) //from tableName
 		fmt.Println("★★2")
-		data = bucket.Get([]byte(s)) // where key = GangNam
+		data = bucket.Get([]byte(s)) // where key = TeamUFC
 		fmt.Println("★★3")
 		return nil
 	})
@@ -88,8 +88,10 @@ func SearchMMACompanyTable(s string) []byte {
 	return data
 }
 
+//볼트비에서 읽은 []byte를 struct에 저장
 func (s *Team) Restore(data []byte) {
-	fmt.Println("★★5")
+	fmt.Println("★★5 s:", *s)
+	fmt.Println("★★5 data:", data)
 	utils.FromBytes(s, data)
 	fmt.Println("★★10")
 }
