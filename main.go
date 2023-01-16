@@ -16,7 +16,7 @@ import (
 )
 
 var t [2]*db.Team
-var t1 []db.Team
+var t1 []*db.Team
 
 // type t3 db.Team  이게되네
 
@@ -60,9 +60,10 @@ func status(rw http.ResponseWriter, r *http.Request) {
 	Team2Ranker := []string{"MHMan", "HISu", "YYJun"}
 	teammade1 := db.CreateTeam1(Team1, Team1Ranker)
 	teammade2 := db.CreateTeam1(Team2, Team2Ranker)
-	t[0] = teammade1
-	t[1] = teammade2
-	json.NewEncoder(rw).Encode(t)
+	// t[0] = teammade1
+	// t[1] = teammade2
+	t1 := []*db.Team{teammade1, teammade2}
+	json.NewEncoder(rw).Encode(t1)
 
 }
 
